@@ -16,8 +16,6 @@ public class Main {
         vertexArrayList.add(v3);
         vertexArrayList.add(v4);
 
-
-
         Graph graph = new Graph(true,false);
         graph.addVertex(v1.getData());
         graph.addVertex(v2.getData());
