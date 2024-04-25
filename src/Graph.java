@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph {
     private ArrayList<Vertex> vertices;
@@ -46,7 +44,7 @@ public class Graph {
         visitQueue.add(start);
         while (!visitQueue.isEmpty()) {
             Object current = visitQueue.remove();
-            System.out.println(((Vertex) current).getData());
+            System.out.print(((Vertex) current).getData()+" ");
             for(Edge e : ((Vertex) current).getEdges()) {
                 Vertex neighbor = e.getEnd();
                 if(!visitedVertices.contains(neighbor)) {
@@ -57,10 +55,8 @@ public class Graph {
         }
     }
 
-
     public void depthFirstTraversal(Vertex start, ArrayList<Vertex> visitedVertices) {
         System.out.println(start.getData());
-
         for (Edge e: start.getEdges()) {
             Vertex neighbor = e.getEnd();
             if (!visitedVertices.contains(neighbor)) {
@@ -70,4 +66,36 @@ public class Graph {
         }
     }
 
+    /*
+    public static Dictionary[] dijkstra (Graph g, Vertex startingVertex){
+        Dictionary<String, Integer> distances = new Hashtable<>();
+        Dictionary<String, Vertex> previous = new Hashtable<>();
+        PriorityQueue<QueueObject> queue = new PriorityQueue<QueueObject>();
+
+        distances.put(startingVertex.getData(), 0);
+        queue.add(new QueueObject(startingVertex, 0));
+
+        for (Vertex v: g.getVertices()) {
+            if(v != startingVertex){
+                distances.put(v.getData(), Integer.MAX_VALUE);
+            }
+            previous.put(v.getData(), new Vertex("Null"));
+        }
+
+        while(queue.size() != 0){
+            Vertex current = queue.poll().vertex;
+            for (Edge e: current.getEdges()) {
+                Integer alternate = distances.get(current.getData()) + e.getWeight();
+                String neighborValue = e.getEnd().getData();
+                if (alternate < distances.get(neighborValue)){
+                    distances.put(neighborValue, alternate);
+                    previous.put(neighborValue, current);
+                    queue.add(new QueueObject(e.getEnd(), distances.get(neighborValue)));
+                }
+            }
+        }
+
+        return new Dictionary[]{distances, previous};
+    }
+ */
 }
