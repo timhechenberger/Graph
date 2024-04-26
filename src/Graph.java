@@ -55,16 +55,84 @@ public class Graph {
         }
     }
 
-    public void depthFirstTraversal(Vertex start, ArrayList<Vertex> visitedVertices) {
-        System.out.println(start.getData());
-        for (Edge e: start.getEdges()) {
+    public void depthFirstTraversal(Vertex start) {
+        ArrayList<Vertex> visitedVertices = new ArrayList<>();
+        depthFirstTraversalRecursive(start, visitedVertices);
+    }
+
+    private void depthFirstTraversalRecursive(Vertex current, ArrayList<Vertex> visitedVertices) {
+        visitedVertices.add(current);
+        System.out.print(current.getData()+" ");
+        for (Edge e : current.getEdges()) {
             Vertex neighbor = e.getEnd();
             if (!visitedVertices.contains(neighbor)) {
-                visitedVertices.add(neighbor);
-                depthFirstTraversal(neighbor, visitedVertices);
+                depthFirstTraversalRecursive(neighbor, visitedVertices);
             }
         }
     }
+
+    public Map<String, Object> shortestPath(int start, int end) {
+        Vertex startVertex = getVertexByValue(start);
+        Vertex endVertex = getVertexByValue(end);
+        if (startVertex == null || endVertex == null) {
+            System.out.println("Start or end vertex not found!");
+            return null;
+        }
+
+        // Initialisierung der Distanzen und Vorgänger
+        HashMap<Vertex, Integer> distances = new HashMap<>();
+        HashMap<Vertex, Vertex> previousVertices = new HashMap<>();
+        for (Vertex v : vertices) {
+            distances.put(v, Integer.MAX_VALUE);
+            previousVertices.put(v, null);
+        }
+        distances.put(startVertex, 0);
+
+        // Set für unbesuchte Knoten
+        Set<Vertex> unvisited = new HashSet<>(vertices);
+
+        while (!unvisited.isEmpty()) {
+            // Knoten mit der geringsten Distanz auswählen
+            Vertex current = null;
+            for (Vertex v : unvisited) {
+                if (current == null || distances.get(v) < distances.get(current)) {
+                    current = v;
+                }
+            }
+
+            // Wenn der Endknoten erreicht ist, brechen Sie ab
+            if (current == endVertex) {
+                break;
+            }
+
+            unvisited.remove(current);
+
+            // Aktualisieren der Distanzen zu benachbarten Knoten
+            for (Edge e : current.getEdges()) {
+                Vertex neighbor = e.getEnd();
+                int newDistance = distances.get(current) + e.getWeight();
+                if (newDistance < distances.get(neighbor)) {
+                    distances.put(neighbor, newDistance);
+                    previousVertices.put(neighbor, current);
+                }
+            }
+        }
+
+        // Pfad vom Startknoten zum Endknoten rekonstruieren
+        ArrayList<Vertex> path = new ArrayList<>();
+        Vertex current = endVertex;
+        while (current != null) {
+            path.add(current);
+            current = previousVertices.get(current);
+        }
+        Collections.reverse(path);
+
+        // Rückgabe der kürzesten Distanz und des Pfades
+        Map<String, Object> result = new HashMap<>();
+        result.put("distance", distances.get(endVertex));
+        result.put("path", path);
+        return result;
+
 
     /*
     public static Dictionary[] dijkstra (Graph g, Vertex startingVertex){
@@ -98,4 +166,5 @@ public class Graph {
         return new Dictionary[]{distances, previous};
     }
  */
+    }
 }

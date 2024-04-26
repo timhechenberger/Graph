@@ -1,6 +1,5 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -11,9 +10,9 @@ public class Main {
         Vertex v4 = new Vertex(4);
 
         ArrayList<Vertex> vertexArrayList = new ArrayList<Vertex>();
-        vertexArrayList.add(v1);
-        vertexArrayList.add(v2);
+        vertexArrayList.add(v2  );
         vertexArrayList.add(v3);
+        vertexArrayList.add(v1);
         vertexArrayList.add(v4);
 
         Graph graph = new Graph(true,false);
@@ -27,15 +26,29 @@ public class Main {
         graph.addEdge(v2,v4,7);
         graph.addEdge(v3,v4,3);
 
-        System.out.println("breadthFirstTraversal");
+        System.out.println("breadthFirstTraversal:");
         graph.breadthFirstTraversal(v1);
 
         System.out.println("\n");
 
-        System.out.println("depthFirstTraversal");
-        graph.depthFirstTraversal(v1,vertexArrayList);
+        System.out.println("depthFirstTraversal:");
+        graph.depthFirstTraversal(v1);
 
+        System.out.println("\n");
 
-
+        // Anwendung der shortestPath-Methode
+        System.out.println("shortestPath:");
+        int start = v1.getData();
+        int end = v4.getData();
+        System.out.println("Shortest Path from v" + start + " to v" + end + ":");
+        Map<String, Object> shortestPathResult = graph.shortestPath(start, end);
+        int shortestDistance = (int) shortestPathResult.get("distance");
+        ArrayList<Vertex> shortestPath = (ArrayList<Vertex>) shortestPathResult.get("path");
+        System.out.println("Shortest Distance: " + shortestDistance);
+        System.out.print("Shortest Path: ");
+        for (Vertex vertex : shortestPath) {
+            System.out.print("v" + vertex.getData() + " ");
+        }
+        System.out.println();
     }
 }
